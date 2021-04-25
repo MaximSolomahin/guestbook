@@ -35,15 +35,3 @@
     <?php
         }
     }
-    function pagination($get){
-        $link = connectDB();
-        $result =  mysqli_query($link, "SELECT COUNT(*) as count FROM massage WHERE id > 0");
-        $count = mysqli_fetch_assoc($result);
-
-        $limit_page = 3;
-        $total_pagination = ceil($count / $limit_page);
-
-
-
-
-    }
