@@ -15,10 +15,9 @@ if (isset($_POST['submit'])){
     $date = date('Y-m-d H:i:s');
     addMassage($_POST['name'],$_POST['text'],$date);
 }
-
+//pagination
 $result = mysqli_query($link, "SELECT COUNT(*) as count FROM massage WHERE id > 0");
-$count = mysqli_fetch_assoc($result)['count'];
-
+$count = ceil(mysqli_fetch_assoc($result)['count'] / 3);
 ?>
 <div id="wrapper">
     <h1>Гостевая книга</h1>
@@ -32,12 +31,15 @@ $count = mysqli_fetch_assoc($result)['count'];
                 </li>
 
                 <?php
-                //<li class="active"><a href="?page=1">1</a></li>
                     for ($i = 1; $i <= $count; $i++){
-                        ?>
-                <li><a href="?page=<?=$i?>"><?=$i?></a></li>
+                        if ($_GET['page'] == $i){
+                            $class = ' class="active"';
+                        } else {
+                            $class = '';
+                        }
+                    ?>
+                        <li<?=$class?>><a href="?page=<?=$i?>"><?=$i?></a></li>
                 <?php
-
                     }
                 ?>
                 <li>
@@ -48,14 +50,21 @@ $count = mysqli_fetch_assoc($result)['count'];
             </ul>
         </nav>
     </div>
+
     <?php
     $pages = $_GET['page'];
+    // View Massage
         viewMessage($pages);
-    ?>
-
+        if (isset($_POST['submit'])){
+            ?>
     <div class="info alert alert-info">
         Запись успешно сохранена!
     </div>
+    <?php
+        }
+        mysqli_close($link);
+    ?>
+
     <div id="form">
         <form action="" method="POST">
             <p><input name="name" class="form-control" placeholder="Ваше имя"></p>
