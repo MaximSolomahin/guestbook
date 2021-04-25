@@ -14,10 +14,13 @@
         return $result;
     }
 
-    function viewMessage(){
+    function viewMessage($pages){
+        $notesOnPage = 3;
+        $form = ($pages - 1) * $notesOnPage;
+
         $link = connectDB();
 
-        $result = mysqli_query($link, "SELECT * FROM massage WHERE id > 0 ORDER BY id LIMIT 3");
+        $result = mysqli_query($link, "SELECT * FROM massage WHERE id > 0 ORDER BY data DESC LIMIT $form, $notesOnPage");
         for ($massage = []; $row = mysqli_fetch_assoc($result); $massage[] = $row);
 
         foreach ($massage as $elem){
@@ -32,4 +35,15 @@
     <?php
         }
     }
-    ?>
+    function pagination($get){
+        $link = connectDB();
+        $result =  mysqli_query($link, "SELECT COUNT(*) as count FROM massage WHERE id > 0");
+        $count = mysqli_fetch_assoc($result);
+
+        $limit_page = 3;
+        $total_pagination = ceil($count / $limit_page);
+
+
+
+
+    }
